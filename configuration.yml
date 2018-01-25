@@ -1,1 +1,8 @@
 ---
+
+- name: WHM configuration
+  hosts: whm
+
+  roles:
+    - software
+    - awscli
