@@ -1,1 +1,35 @@
+---
 
+- name: Epel repository
+  yum:
+    name: python2-pip
+    state: latest
+
+- name: Installing AWSCLI through PIP
+  pip:
+    name: awscli
+    extra_args: --upgrade
+
+- name: Creating AWS credentials directory
+  file:
+    path: /root/.aws
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+
+- name: Copying config file of AWS
+  template:
+    src: config.j2
+    dest: /root/.aws/config
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Copying credentials file of AWS
+  template:
+    src: credentials.j2
+    dest: /root/.aws/credentials
+    owner: root
+    group: root
+    mode: 0600
