@@ -6,3 +6,4 @@
   roles:
     - software
     - awscli
+    - cloudwatch
