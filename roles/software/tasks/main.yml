@@ -1,1 +1,27 @@
+---
 
+- name: Epel repository
+  yum:
+    name: epel-release
+    state: latest
+
+- name: Package installation
+  yum:
+    name:
+      - vim
+      - htop
+      - bind-utils
+      - colordiff
+      - curl
+      - wget
+      - mtr
+      - tcpdump
+  state: latest
+
+- name: VIM configuration
+  copy: 
+    src: vim_config
+    dest: /root/.vimrc
+    owner: root
+    group: root
+    mode: 0644 
