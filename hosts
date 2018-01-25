@@ -1,1 +1,6 @@
+[whm]
+172.17.0.3
 
+[cpanel:vars]
+ansible_python_interpreter=/usr/bin/python2.7
+ansible_user=centos
