@@ -1,9 +1,12 @@
 ---
 
-- name: WHM configuration
-  hosts: whm
+- hosts: whm
+  become: yes
+  become_user: root
+  become_method: sudo
 
   roles:
     - software
     - awscli
     - cloudwatch
+    - security
