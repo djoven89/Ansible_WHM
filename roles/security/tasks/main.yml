@@ -1,0 +1,39 @@
+---
+
+- name: PASSWORD | Expiration settings
+  replace:
+    path: /etc/login.defs
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace}}"
+    backup: yes 
+  with_items:
+    - { regexp: "MAX_DAYS.*", replace: "MAX_DAYS 60" }
+    - { regexp: "MIN_DAYS.*", replace: "MIN_DAYS 0" }
+    - { regexp: "MIN_LEN.*", replace: "MIN_LEN 8" }
+    - { regexp: "WARN_AGE.*", replace: "WARN_AGE 7" }
+
+- name: BANNER | SSH banner
+  copy:
+    src: ssh_banner.txt
+    dest: /etc/ssh/ssh_banner.txt
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+
+- name: SSH | Copying SSH files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  with_items:
+    - { src: 'motd.j2', dest: '/etc/motd' }
+    - { src: 'sshd_config.j2', dest: '/etc/ssh/sshd_config' }
+  register: ssh_ok
+
+- name: restart ssh
+  command: /scripts/restartsrv_sshd
+  when: ssh_ok|succeeded
