@@ -1,11 +1,11 @@
 ---
 
-- name: Epel repository
+- name: EPEL | Repository
   yum:
     name: epel-release
     state: latest
 
-- name: Package installation
+- name: PACKAGE | Installation 
   yum:
     name:
       - vim
@@ -16,12 +16,20 @@
       - wget
       - mtr
       - tcpdump
+      - tree
+      - zip
+      - unzip
   state: latest
 
-- name: VIM configuration
+- name: VIM | Configuration file
   copy: 
     src: vim_config
     dest: /root/.vimrc
     owner: root
     group: root
     mode: 0644 
+
+- name: SHELL | Setting color to the shell
+  lineinfile:
+   path: /root/.bashrc
+   line: 'export PS1="\[\e[36m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[36m\]@\[\e[m\]\[\e[31m\]\h\[\e[m\]\[\e[36m\]:\[\e[m\]\[\e[31m\]\w\[\e[m\]\[\e[36m\]]\[\e[m\]\[\e[31m\]:\[\e[m\] " '
