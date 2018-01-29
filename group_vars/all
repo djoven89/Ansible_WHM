@@ -1,3 +1,12 @@
+---
+
+## AWS settings
 aws_region: eu-central-1
 aws_id: XXXX	
-aws_key: XXXX
+aws_key: ZZZZ
+
+## CloudWatch settings
+aws_cloudwatch_url: http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.1.zip
+
+## SSH settings
+ssh_port: 22090
