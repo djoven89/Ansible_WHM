@@ -1,16 +1,20 @@
 ---
 
-- name: Epel repository
+- name: PIP | Installation package
   yum:
     name: python2-pip
     state: latest
 
-- name: Installing AWSCLI through PIP
+- name: AWSCLI | Instalation via PIP
   pip:
     name: awscli
     extra_args: --upgrade
 
-- name: Creating AWS credentials directory
+- name: PERMISSION | AWSCLI permission
+  shell: |
+    /bin/find /bin/ -type f -name 'aws' -o -name 'aws_compl*' | /bin/xargs chmod 0750
+
+- name: FOLDER | AWS access
   file:
     path: /root/.aws
     state: directory
@@ -18,18 +22,13 @@
     group: root
     mode: 755
 
-- name: Copying config file of AWS
+- name: CREDENTIALS | AWS credentials file
   template:
-    src: config.j2
-    dest: /root/.aws/config
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: root
     group: root
     mode: 0600
-
-- name: Copying credentials file of AWS
-  template:
-    src: credentials.j2
-    dest: /root/.aws/credentials
-    owner: root
-    group: root
-    mode: 0600
+  with_items:
+    - { src: 'config.j2', dest: '/root/.aws/config' }
+    - { src: 'credentials.j2', dest: '/root/.aws/credentials' }
