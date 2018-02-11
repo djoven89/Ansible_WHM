@@ -1,0 +1,6 @@
+---
+
+name: INSTALL | Let's encripyt
+  command: install_lets_encrypt_autossl_provider
+  args:
+    chdir: /scripts/
