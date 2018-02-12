@@ -13,3 +13,6 @@ aws_cloudwatch_url: http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchM
 
 ## SSH settings
 ssh_port: 22090
+
+## Admin Password
+user_password: $6$IY/54yEQj$C95bpd7s2GZcXaRNL0rT3QdSCUtelkrzMLF/.HbyTi5mRR5wfLIM2Sj1BCX7ZzLr4/wJwQVU4YBGgHPCa71.60
