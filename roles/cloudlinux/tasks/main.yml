@@ -1,6 +1,0 @@
----
-
-- name: LICENSE | CloudLinux activate
-  command: rhnreg_ks --activationkey= {{ cloudlinux_license }} --force
-  args:
-    chdir: /usr/bin/
