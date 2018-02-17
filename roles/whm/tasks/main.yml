@@ -1,5 +1,10 @@
 ---
 
+name: LICENCIA | Activando CloudLinux
+  command: rhnreg_ks --activationkey= {{ cloudlinux_license }} --force
+  args:
+    chdir: /usr/bin/
+
 name: INSTALL | Protector de los repos de CloudLinux
   yum:
     name: yum-plugin-protectbase
