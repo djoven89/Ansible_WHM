@@ -1,6 +1,72 @@
 ---
 
-name: INSTALL | Let's encripyt
+name: INSTALL | Protector de los repos de CloudLinux
+  yum:
+    name: yum-plugin-protectbase
+    state: present
+    register: plugin
+
+name: REGEX | Descomentando la conf del plugin
+  replace:
+    path: /etc/yum/pluginconf.d/rhnplugin.conf
+    regexp: "{{ item.old }}"
+    replace: "{{ item.new }}"
+    backup: yes
+  with_items:
+    - { old: '#.cloud', new: '[cloud' }
+    - { old: '#protect', new: 'protect' }
+  when: plugin|succeeded
+
+name: USER | Creando un usuario administrador
+  user: 
+    name: daniel
+    shell: /bin/bash
+    groups: sudo
+    append: yes 
+    home: /home/daniel
+    password: "{{ user_password }}"
+
+name: INSTALL | Paquetes PHP
+  yum:
+    name:
+      - ea-php55-php-intl 
+      - ea-php56-php-intl 
+      - ea-php70-php-intl 
+      - ea-php55-php-iconv 
+      - ea-php56-php-iconv 
+      - ea-php70-php-iconv 
+      - ea-php55-php-fileinfo 
+      - ea-php56-php-fileinfo 
+      - ea-php70-php-fileinfo 
+   state: latest
+
+name: COPY | Features and Packages config
+  copy:
+    src: "{{ item.origen }}"
+    dest: "{{ item.destino }}"
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+  with_items:
+  - { origen: 'FT_Essential' , destino: '/var/cpanel/features/Essential' }
+  - { origen: 'FT_Gold' , destino: '/var/cpanel/features/Gold' }
+
+  - { origen: 'PK_Simple' , destino: '/var/cpanel/packages/Essential' }
+  - { origen: 'PK_Gold' , destino: '/var/cpanel/packages/Gold' }
+
+name: INSTALL | Let's encrypt
   command: install_lets_encrypt_autossl_provider
   args:
     chdir: /scripts/
+
+name: DMARC | Añadiendo registro DMARC para los dominios
+  lineinfile:
+    path: "{{ item.path }}"
+    path: /var/cpanel/zonetemplates/root_standardvirtualftp
+    regexp: '^_dmarc'
+    line: '_dmarc.%domain%.  IN  TXT  "v=DMARC1; p=quarantine; sp=quarantine; adkim=s; aspf=s; rua=mailto:webmaster@%domain%; ruf=mailto:webmaster@%domain%; rf=afrf; pct=100; ri=86400"'
+    state: present 
+  with_items:
+  - { path: '/var/cpanel/zonetemplates/root_standardvirtualftp' }
+  - { path: '/var/cpanel/zonetemplates/root_standard' }
